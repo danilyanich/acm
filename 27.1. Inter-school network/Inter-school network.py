@@ -52,8 +52,6 @@ def shrink(conn_list, start, chain):
 	for _v in chain:
 		union = set.union(conn_list[start - 1], conn_list[_v - 1])
 		union.remove(_v)
-		if start in union:
-			union.remove(start)
 
 		print('{} + {} = {}'.format(start, _v, union))
 
@@ -66,6 +64,9 @@ def shrink(conn_list, start, chain):
 					vert_set.add(start)
 
 		conn_list[_v - 1] = None
+
+	if start in conn_list[start - 1]:
+		conn_list[start - 1].remove(start)
 
 
 def invert(conn_list):
@@ -82,12 +83,22 @@ def invert(conn_list):
 	return conn_list_t
 
 
+def single_connectivity(conn_list):
+	count = 0
+	for i in range(len(conn_list)):
+		if conn_list[i] is None:
+			count += 1
+	return count == (len(conn_list) - 1)
+
+
 def ins(conn_list):
 	return outs(invert(conn_list))
 
 
 def outs(conn_list):
 	count = 0
+	if single_connectivity(conn_list):
+		return 0
 	for i in range(len(conn_list)):
 		if conn_list[i] is not None:
 			if len(conn_list[i]) == 0:
