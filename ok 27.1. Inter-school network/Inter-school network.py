@@ -10,32 +10,35 @@ def dfs(conn_list, start):
 		if conn_list[v - 1] is None:
 			return
 
-		for _v in conn_list[v - 1]:
-			if conn_list[v - 1] is None:
-				return
-			if _v not in used:
-
-				if _v == start:
-					print('{} -> {}'.format(v, _v))
-					print('chain: {}'.format(chain))
-					print('found cycle!')
-
-					shrink(conn_list, start, chain)
-
-					print('shrinked:')
-					pretty(conn_list)
-					print()
-
-					dfs(conn_list, start)
-
+		try:
+			for _v in conn_list[v - 1]:
+				if conn_list[v - 1] is None:
 					return
-				else:
-					print('{} -> {}'.format(v, _v))
+				if _v not in used:
 
-					used.append(_v)
-					__dfs(_v)
-					chain.remove(_v)
-					pass
+					if _v == start:
+						print('{} -> {}'.format(v, _v))
+						print('chain: {}'.format(chain))
+						print('found cycle!')
+
+						shrink(conn_list, start, chain)
+
+						print('shrinked:')
+						pretty(conn_list)
+						print()
+
+						dfs(conn_list, start)
+
+						return
+					else:
+						print('{} -> {}'.format(v, _v))
+
+						used.append(_v)
+						__dfs(_v)
+						chain.remove(_v)
+						pass
+		except RuntimeError:
+			return
 		pass
 
 	__dfs(start)

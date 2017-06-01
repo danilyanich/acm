@@ -1,4 +1,5 @@
 *.txt
 *.in
 *.out
+*.test
 /.idea
